@@ -3,9 +3,6 @@ import random
 import string
 from multiprocessing import Process, Queue
 
-size_in_gb = 1
-size_in_bytes = size_in_gb * 1024 * 1024 * 1024
-
 
 def generate_random_string(length):
     return "".join(random.choices(string.ascii_letters, k=length))
@@ -22,6 +19,7 @@ def write_random_strings(
 
 
 def create_random_string_file(file_path: str):
+    size_in_bytes =  1024 * 1024 * 1024
     target_word_length = 20
     num_processes = os.cpu_count()
 

@@ -2,7 +2,7 @@ import os
 from shutil import rmtree
 from multiprocessing import cpu_count, Process, Queue
 
-def worker(queue, output_dir):
+def process_data(queue, output_dir):
     while True:
         data = queue.get()
         if data is None:
@@ -13,18 +13,18 @@ def worker(queue, output_dir):
             file.write(text)
         print(f"{letter.upper()} processed!")
 
-def file_writer(data_queue, output_dir):
+def start_workers(data_queue, output_dir):
     num_workers = cpu_count()
     processes = []
 
     for _ in range(num_workers):
-        p = Process(target=worker, args=(data_queue, output_dir))
+        p = Process(target=process_data, args=(data_queue, output_dir))
         p.start()
         processes.append(p)
 
     return processes
 
-def result_maker(output_dir):
+def generate_result(output_dir):
     for root, _, files in os.walk(output_dir):
         for txt_file in sorted(files):
             file_path = os.path.join(root, txt_file)
@@ -40,7 +40,7 @@ def main():
         os.makedirs(output_dir)
 
     data_queue = Queue(maxsize=6)
-    processes = file_writer(data_queue, output_dir)
+    processes = start_workers(data_queue, output_dir)
 
     with open('words.txt', 'r') as file:
         for data in file:
@@ -53,7 +53,7 @@ def main():
     for p in processes:
         p.join()
 
-    result_maker(output_dir)
+    generate_result(output_dir)
     
     rmtree(output_dir)
 
