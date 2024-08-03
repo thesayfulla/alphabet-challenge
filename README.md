@@ -1,4 +1,8 @@
-Alphabet challenge
+# Alphabet challenge
+
+## Problem
+Imagine you have a 1GB file containing random, various words. Your task is to sort these words alphabetically using only 100MB of RAM. How would you accomplish this?
+
 
 ## Setup
 1. Clone:
